@@ -1,0 +1,63 @@
+﻿<Window x:Class="AssistInstaller.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AssistInstaller"
+        mc:Ignorable="d"
+        Title="Assist Installer" Height="350" Width="550"
+        WindowStyle="None" ResizeMode="CanMinimize" AllowsTransparency="True" Loaded="Window_Loaded">
+    <Grid MouseDown="WindowBorder_MouseDown">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28"/>
+            <RowDefinition/>
+            
+        </Grid.RowDefinitions>
+
+        <Grid Name="WindowBorder" Background="{StaticResource AssistBackground}">
+            <Image HorizontalAlignment="Left" Source="Resources/Icons/Assist_Logo_White.png" Opacity=".3" RenderOptions.BitmapScalingMode="HighQuality"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource AssistBackground}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <Label Foreground="White" Content="{TemplateBinding Content}"
+                                               HorizontalAlignment="Center"></Label>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Background" Value="{StaticResource AssistNavigationButtonHover}"></Setter>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Background" Value="{StaticResource AssistBackgroundSuperLight}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+
+                <Button x:Name="MinimizeBtn" Width="40" Height="28" Content="🗕" Click="MinimizeBtn_Click"></Button>
+                <Button x:Name="ExitBtn" Width="40" Height="28" Content="X" Click="ExitBtn_Click"></Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Background="{StaticResource AssistBackgroundLight}">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="28"/>
+            </Grid.RowDefinitions>
+            <Frame x:Name="MainContentFrame"/>
+        </Grid>
+    </Grid>
+</Window>

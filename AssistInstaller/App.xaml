@@ -1,0 +1,25 @@
+﻿<Application x:Class="AssistInstaller.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:AssistInstaller"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <SolidColorBrush x:Key="AssistBackground" Color="#16181d"/>
+        <SolidColorBrush x:Key="AssistBackgroundLight" Color="#0f1115"></SolidColorBrush>
+        <SolidColorBrush x:Key="AssistBackgroundSuperLight" Color="#364159"></SolidColorBrush>
+
+        <SolidColorBrush x:Key="AssistNavigationButtonHover" Color="#FF212735"></SolidColorBrush>
+
+        <SolidColorBrush x:Key="AssistNavigationButton_SelectedFill" Color="#33CF1439"/>
+        <SolidColorBrush x:Key="AssistNavigationButton_SelectedOutline" Color="#CF1439"/>
+
+        <SolidColorBrush x:Key="AssistNavigationButton_NotSelectedFill" Color="#33414958"/>
+        <SolidColorBrush x:Key="AssistNavigationButton_NotSelectedOutline" Color="#33111822"/>
+
+        <SolidColorBrush x:Key="AssistNavigationButton_SelectedHighlightFill" Color="#33EA1842"/>
+        <SolidColorBrush x:Key="AssistNavigationButton_SelectedHighlightOutline" Color="#FFF12E54"/>
+
+        <!-- Font Family -->
+        <FontFamily x:Key="WorkSans">pack://application:,,,/Resources/Fonts/#Work Sans</FontFamily>
+    </Application.Resources>
+</Application>
