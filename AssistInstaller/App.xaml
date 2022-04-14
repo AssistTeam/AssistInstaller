@@ -10,14 +10,14 @@
 
         <SolidColorBrush x:Key="AssistNavigationButtonHover" Color="#FF212735"></SolidColorBrush>
 
-        <SolidColorBrush x:Key="AssistNavigationButton_SelectedFill" Color="#33CF1439"/>
-        <SolidColorBrush x:Key="AssistNavigationButton_SelectedOutline" Color="#CF1439"/>
+        <SolidColorBrush x:Key="AssistNavigationButton_NotSelectedFill" Color="#17181D"/>
+        <SolidColorBrush x:Key="AssistNavigationButton_NotSelectedOutline" Color="#232731"/>
 
-        <SolidColorBrush x:Key="AssistNavigationButton_NotSelectedFill" Color="#33414958"/>
-        <SolidColorBrush x:Key="AssistNavigationButton_NotSelectedOutline" Color="#33111822"/>
+        <SolidColorBrush x:Key="AssistNavigationButton_SelectedFill" Color="#54F61E51"/>
+        <SolidColorBrush x:Key="AssistNavigationButton_SelectedOutline" Color="#F61E51"/>
 
-        <SolidColorBrush x:Key="AssistNavigationButton_SelectedHighlightFill" Color="#33EA1842"/>
-        <SolidColorBrush x:Key="AssistNavigationButton_SelectedHighlightOutline" Color="#FFF12E54"/>
+        <SolidColorBrush x:Key="AssistNavigationButton_HoverHighlightFill" Color="#17181D"/>
+        <SolidColorBrush x:Key="AssistNavigationButton_HoverHighlightOutline" Color="#F61E51"/>
 
         <!-- Font Family -->
         <FontFamily x:Key="WorkSans">pack://application:,,,/Resources/Fonts/#Work Sans</FontFamily>

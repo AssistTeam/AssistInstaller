@@ -24,5 +24,22 @@ namespace AssistInstaller.MVVM.Views
         {
             InitializeComponent();
         }
+
+        private void Menu_Loaded(object sender, RoutedEventArgs e)
+        {
+            InstallBtn.Checked += InstallBtn_Checked;
+            UninstallBtn.Checked += UninstallBtn_Checked;
+            InstallBtn.IsChecked = true;
+        }
+
+        private void UninstallBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            MainWindow.AppInstance.CurrentInstallerMode = Models.InstallerMode.Uninstall;
+        }
+
+        private void InstallBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            MainWindow.AppInstance.CurrentInstallerMode = Models.InstallerMode.Install;
+        }
     }
 }

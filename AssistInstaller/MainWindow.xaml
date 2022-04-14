@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
 
         <Grid Name="WindowBorder" Background="{StaticResource AssistBackground}">
-            <Image HorizontalAlignment="Left" Source="Resources/Icons/Assist_Logo_White.png" Opacity=".3" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <Image HorizontalAlignment="Left" Source="Resources/Icons/Assist_Logo_SweetRed.png" Opacity=".3" RenderOptions.BitmapScalingMode="HighQuality"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <StackPanel.Resources>
@@ -58,6 +58,34 @@
                 <RowDefinition Height="28"/>
             </Grid.RowDefinitions>
             <Frame x:Name="MainContentFrame"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource AssistNavigationButton_NotSelectedFill}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource AssistNavigationButton_NotSelectedOutline}"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <Label Content="{TemplateBinding Content}" Foreground="White"
+                                               FontFamily="{StaticResource WorkSans}" VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource AssistNavigationButton_SelectedFill}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource AssistNavigationButton_SelectedOutline}"/>
+                            </Trigger>
+                            </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+                <Button x:Name="BackBtn" Width="65" Content="Back" Click="BackBtn_Click"/>
+                <Button x:Name="NextBtn" Width="65" Content="Next" Click="NextBtn_Click" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
