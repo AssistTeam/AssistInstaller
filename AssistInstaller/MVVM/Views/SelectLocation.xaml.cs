@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AssistInstaller.MVVM.ViewModels;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace AssistInstaller.MVVM.Views
 {
@@ -22,8 +25,23 @@ namespace AssistInstaller.MVVM.Views
     {
         public SelectLocation()
         {
+            DataContext =  MainWindow.AppInstance;
             MainWindow.AppInstance.ChangePageState(Models.InstallerPageState.LocationSelect);
             InitializeComponent();
+        }
+
+        private void FileD_Btn_Click(object sender, RoutedEventArgs e)
+        {
+
+            using (CommonOpenFileDialog dia = new CommonOpenFileDialog())
+            {
+                dia.IsFolderPicker = true;
+                dia.InitialDirectory = "C:/";
+                if (dia.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    MainWindow.AppInstance.InstalLoc = dia.FileName;
+                }
+            }
         }
     }
 }

@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
 
         <Grid Name="WindowBorder" Background="{StaticResource AssistBackground}">
-            <Image HorizontalAlignment="Left" Source="Resources/Icons/Assist_Logo_SweetRed.png" Opacity=".3" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <Image HorizontalAlignment="Left" Source="Resources/Icons/Assist_Logo_SweetRed.png" Opacity=".3" RenderOptions.BitmapScalingMode="HighQuality" Height="20" Margin="3"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <StackPanel.Resources>
@@ -57,7 +57,7 @@
                 <RowDefinition/>
                 <RowDefinition Height="28"/>
             </Grid.RowDefinitions>
-            <Frame x:Name="MainContentFrame"/>
+            <Frame x:Name="MainContentFrame" NavigationUIVisibility="Hidden"/>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type Button}">
@@ -68,8 +68,7 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type Button}">
                                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                        <Label Content="{TemplateBinding Content}" Foreground="White"
-                                               FontFamily="{StaticResource WorkSans}" VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
+                                        <Label Content="{TemplateBinding Content}" Foreground="White" FontFamily="{StaticResource WorkSans}" VerticalContentAlignment="Center" HorizontalAlignment="Center" FontSize="11"/>
                                     </Border>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -83,8 +82,8 @@
                             </Style.Triggers>
                     </Style>
                 </StackPanel.Resources>
-                <Button x:Name="BackBtn" Width="65" Content="Back" Click="BackBtn_Click"/>
-                <Button x:Name="NextBtn" Width="65" Content="Next" Click="NextBtn_Click" />
+                <Button x:Name="BackBtn" Width="65" Content="Back" Click="BackBtn_Click" Margin="2,2"/>
+                <Button x:Name="NextBtn" Width="65" Content="Next" Click="NextBtn_Click" Margin="2,2"/>
             </StackPanel>
         </Grid>
     </Grid>

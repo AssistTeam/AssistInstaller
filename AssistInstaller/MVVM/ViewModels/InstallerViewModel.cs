@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,30 @@ namespace AssistInstaller.MVVM.ViewModels
         public InstallerMode CurrentInstallerMode;
         public InstallerPageState CurrentPageState { get; private set; }
         public List<InstallerPageState> PreviousPageState = new List<InstallerPageState>();
+
+        private string _installLoc = Path.Combine("C:/", "Assist");
+        public string InstalLoc
+        {
+            get => _installLoc;
+            set => SetProperty(ref _installLoc, value);
+        }
+
+        private string _installStatus;
+
+        public string InstallStatus
+        {
+            get => _installStatus;
+            set => SetProperty(ref _installStatus, value);
+        }
+
+        private double _installProgress;
+
+        public double InstallProgress
+        {
+            get => _installProgress;
+            set => SetProperty(ref _installProgress, value);
+        }
+
 
         public void ChangePageState(InstallerPageState newState)
         {

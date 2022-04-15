@@ -24,10 +24,11 @@ namespace AssistInstaller
     public partial class MainWindow : Window
     {
         static internal InstallerViewModel AppInstance;
-
+        private static MainWindow window;
 
         public MainWindow()
         {
+            window = this;
             DataContext = AppInstance = new InstallerViewModel();
             AppInstance.ChangePageState(InstallerPageState.Menu);
             InitializeComponent();
@@ -61,6 +62,9 @@ namespace AssistInstaller
                 case InstallerPageState.Menu:
                     await MenuLogic();
                     break;
+                case InstallerPageState.LocationSelect:
+                    await LocationLogic();
+                    break;
             }
         }
 
@@ -73,6 +77,25 @@ namespace AssistInstaller
 
             }
                 
+        }
+
+        public static void DisableBtns()
+        {
+            if (window.BackBtn.IsEnabled == false && window.NextBtn.IsEnabled == false)
+            {
+                window.BackBtn.Visibility = Visibility.Collapsed;
+                window.NextBtn.Visibility = Visibility.Collapsed;
+            }
+
+            window.BackBtn.IsEnabled = false;
+            window.NextBtn.IsEnabled = false;
+
+
+        }
+
+        public static void GotoComplete()
+        {
+            window.MainContentFrame.Navigate(new Uri("MVVM/Views/Complete.xaml", UriKind.RelativeOrAbsolute));
         }
 
         #endregion
@@ -91,6 +114,13 @@ namespace AssistInstaller
                 MainContentFrame.Navigate(new Uri("MVVM/Views/SelectLocation.xaml", UriKind.RelativeOrAbsolute));
             else if (AppInstance.CurrentInstallerMode == InstallerMode.Uninstall)
                 MainContentFrame.Navigate(new Uri("MVVM/Views/Uninstall.xaml", UriKind.RelativeOrAbsolute));
+        }
+
+        async Task LocationLogic()
+        {
+            if (AppInstance.CurrentInstallerMode == InstallerMode.Install)
+                MainContentFrame.Navigate(new Uri("MVVM/Views/Installation.xaml", UriKind.RelativeOrAbsolute));
+            
         }
 
         #endregion

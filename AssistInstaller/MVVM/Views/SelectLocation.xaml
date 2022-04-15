@@ -15,8 +15,10 @@
                     <Path VerticalAlignment="Center" Margin="5" Fill="White" Data="M8 13C6.14 13 4.59 14.28 4.14 16H2V18H4.14C4.59 19.72 6.14 21 8 21S11.41 19.72 11.86 18H22V16H11.86C11.41 14.28 9.86 13 8 13M8 19C6.9 19 6 18.1 6 17C6 15.9 6.9 15 8 15S10 15.9 10 17C10 18.1 9.1 19 8 19M19.86 6C19.41 4.28 17.86 3 16 3S12.59 4.28 12.14 6H2V8H12.14C12.59 9.72 14.14 11 16 11S19.41 9.72 19.86 8H22V6H19.86M16 9C14.9 9 14 8.1 14 7C14 5.9 14.9 5 16 5S18 5.9 18 7C18 8.1 17.1 9 16 9Z" ></Path>
                     <Label Content="Select an install location" Foreground="White" FontFamily="{StaticResource WorkSans}" FontStretch="Medium" FontSize="16" Padding="0" Margin="5" FontWeight="SemiBold" VerticalContentAlignment="Center"></Label>
                 </StackPanel>
-                <StackPanel>
-                    <StackPanel.Resources>
+                
+
+                <DockPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <DockPanel.Resources>
                         <Style TargetType="{x:Type TextBox}">
                             <Setter Property="Background" Value="{StaticResource AssistNavigationButton_NotSelectedFill}"/>
                             <Setter Property="BorderBrush" Value="{StaticResource AssistNavigationButton_NotSelectedOutline}"/>
@@ -25,16 +27,40 @@
                                     <ControlTemplate TargetType="{x:Type TextBox}">
                                         <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
                                             <Grid>
-                                                
+                                                <Label Content="{Binding InstalLoc}" Foreground="White" FontFamily="{StaticResource WorkSans}" VerticalContentAlignment="Center" HorizontalAlignment="Left" FontSize="14"/>
                                             </Grid>
                                         </Border>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
                         </Style>
-                    </StackPanel.Resources>
-                    <TextBox Height="50"></TextBox>
-                </StackPanel>
+
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="{StaticResource AssistNavigationButton_NotSelectedFill}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource AssistNavigationButton_NotSelectedOutline}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Path Data="M3,4C1.89,4 1,4.89 1,6V18A2,2 0 0,0 3,20H11V18.11L21,8.11V8C21,6.89 20.1,6 19,6H11L9,4H3M21.04,11.13C20.9,11.13 20.76,11.19 20.65,11.3L19.65,12.3L21.7,14.35L22.7,13.35C22.92,13.14 22.92,12.79 22.7,12.58L21.42,11.3C21.31,11.19 21.18,11.13 21.04,11.13M19.07,12.88L13,18.94V21H15.06L21.12,14.93L19.07,12.88Z" Fill="White" VerticalAlignment="Center" HorizontalAlignment="Center"></Path>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource AssistNavigationButton_SelectedFill}"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource AssistNavigationButton_SelectedOutline}"/>
+                                    <Setter Property="Cursor" Value="Hand"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DockPanel.Resources>
+                    <TextBox DockPanel.Dock="Left" Height="50" Width="420" IsReadOnly="True" ></TextBox>
+                    <Button x:Name="FileD_Btn" DockPanel.Dock="Right" HorizontalAlignment="Right" Height="50" Width="50" Click="FileD_Btn_Click"></Button>
+                </DockPanel>
             </DockPanel>
         </Grid>
     </Grid>
