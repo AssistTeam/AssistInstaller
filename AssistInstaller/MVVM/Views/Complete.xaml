@@ -35,7 +35,7 @@
             </StackPanel.Resources>
             <Label Content="INSTALLED &lt;3" Foreground="{StaticResource AssistNavigationButton_SelectedOutline}" FontFamily="{StaticResource WorkSans}" FontStretch="Medium" FontSize="36" Padding="0" Margin="5" FontWeight="SemiBold" VerticalContentAlignment="Center" HorizontalAlignment="Center"></Label>
             <TextBox IsReadOnly="True" BorderThickness="0" Text="Thank you for downloading Assist. We hope you love it as much as we do." Foreground="White" FontFamily="{StaticResource WorkSans}" FontStretch="Medium" FontSize="16" Padding="0" Margin="5" FontWeight="Normal" VerticalContentAlignment="Center" Background="Transparent" TextWrapping="WrapWithOverflow" TextAlignment="Center" Width="400"></TextBox>
-            <Button Margin="0,10" Content="LAUNCH" Height="35"></Button>
+            <Button Margin="0,10" Content="LAUNCH" Height="35" Click="Launch_BTN"></Button>
         </StackPanel>
     </Grid>
 </Page>

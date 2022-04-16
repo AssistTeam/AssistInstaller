@@ -52,7 +52,7 @@
                         </Style>
                     </StackPanel.Resources>
                     <RadioButton x:Name="InstallBtn" Width="510" Height="40" Content="Install Assist" Tag="M2 12H4V17H20V12H22V17C22 18.11 21.11 19 20 19H4C2.9 19 2 18.11 2 17V12M12 15L17.55 9.54L16.13 8.13L13 11.25V2H11V11.25L7.88 8.13L6.46 9.55L12 15Z" Margin="0,10"></RadioButton>
-                    <RadioButton x:Name="UninstallBtn" Width="510" Height="40" Content="Uninstall Assist" Tag="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z"></RadioButton>
+                    <RadioButton Visibility="Collapsed" x:Name="UninstallBtn" Width="510" Height="40" Content="Uninstall Assist" Tag="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z"></RadioButton>
                 </StackPanel>
             </DockPanel>
             

@@ -54,24 +54,11 @@ namespace AssistInstaller.Services
 
             HttpClient client = new HttpClient();
 
-           // var resp = await client.GetAsync("https://api.assistapp.dev/installer/data");
+            var resp = await client.GetAsync("https://api.assistapp.dev/data/update");
 
-            /*InstallSettings settings =
-                JsonConvert.DeserializeObject<InstallSettings>(await resp.Content.ReadAsStringAsync());*/
+            InstallSettings settings =
+                JsonConvert.DeserializeObject<InstallSettings>(await resp.Content.ReadAsStringAsync());
 
-            InstallSettings settings = new InstallSettings()
-            {
-                Dependencys = new Dependencys()
-                {
-                    netInstall = "https://download.visualstudio.microsoft.com/download/pr/f13d7b5c-608f-432b-b7ec-8fe84f4030a1/5e06998f9ce23c620b9d6bac2dae6c1d/windowsdesktop-runtime-6.0.4-win-x64.exe",
-                    netVersion = "6.0.4",
-                    wbViewInstall = "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/6bedfa4c-1e12-4805-b92b-7b7c1d7ac647/MicrosoftEdgeWebview2Setup.exe"
-                },
-                DownloadLocation = "https://github.com/HeyM1ke/Assist/releases/download/v1.0.9/Assist.zip",
-                VersionNumber = "1.0.0.0"
-            };
-
-            
             //Clear Files in Dir
             foreach (var file in Directory.GetFiles(installPath, "*.*", SearchOption.AllDirectories))
             {
