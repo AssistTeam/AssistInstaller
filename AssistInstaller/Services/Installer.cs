@@ -14,6 +14,8 @@ using Newtonsoft.Json;
 using System.IO.Compression;
 using System.Reflection;
 using System.Windows;
+using IWshRuntimeLibrary;
+using File = System.IO.File;
 
 namespace AssistInstaller.Services
 {
@@ -27,7 +29,7 @@ namespace AssistInstaller.Services
 
         public async static Task InstallAssist()
         {
-
+            MainWindow.AppInstance.InstallStatus = $"Getting Installer Data";
             // Check for Previous Install.
 
             List<string> installedPrograms = GetInstalledPrograms();
@@ -54,7 +56,7 @@ namespace AssistInstaller.Services
 
             HttpClient client = new HttpClient();
 
-            var resp = await client.GetAsync("https://api.assistapp.dev/data/update");
+            var resp = await client.GetAsync("https://api.assistapp.dev/data/installer");
 
             InstallSettings settings =
                 JsonConvert.DeserializeObject<InstallSettings>(await resp.Content.ReadAsStringAsync());
@@ -81,16 +83,18 @@ namespace AssistInstaller.Services
 
 
 
-
+            MainWindow.AppInstance.InstallStatus = $"Extracting Assist";
             // Extract File
             ZipFile.ExtractToDirectory(Path.Combine(installPath, zipName), installPath, Encoding.UTF8);
 
             MainWindow.AppInstance.InstallProgress = 20;
 
+            MainWindow.AppInstance.InstallStatus = $"Deleting Download File";
             // Delete Init File
             File.Delete(Path.Combine(installPath, zipName));
             MainWindow.AppInstance.InstallProgress = 30;
 
+            MainWindow.AppInstance.InstallStatus = $"Checking for Latest .Net";
             // Check for .Net 6
             bool bNetInstalledFlag = false;
             var installedRuntimes = CheckCoreDesktopRuntimes();
@@ -101,7 +105,7 @@ namespace AssistInstaller.Services
                     bNetInstalledFlag = true;
                 }
             }
-
+            
             // After Checked installs
             if (!bNetInstalledFlag)
             {
@@ -146,6 +150,7 @@ namespace AssistInstaller.Services
 
             MainWindow.AppInstance.InstallProgress = 50;
 
+            MainWindow.AppInstance.InstallStatus = $"Checking for WebView2 Framework";
             bool bWVInstalledFlag = false;
             if (installedPrograms.Count != 0)
             {
@@ -263,21 +268,33 @@ namespace AssistInstaller.Services
         {
 
         }
+        private static void AddShortcut(string installLoc)
+        {
+            string commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
+            string appStartMenuPath = Path.Combine(commonStartMenuPath, "Programs", "Assist");
 
+            if (!Directory.Exists(appStartMenuPath))
+                Directory.CreateDirectory(appStartMenuPath);
+
+            string shortcutLocation = Path.Combine(appStartMenuPath, "Assist" + ".lnk");
+            WshShell shell = new WshShell();
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
+
+            //shortcut.IconLocation = @"C:\Program Files (x86)\TestApp\TestApp.ico"; //uncomment to set the icon of the shortcut
+            shortcut.TargetPath = Path.Combine(installLoc, "Assist.exe");
+            shortcut.Save();
+        }
 
         private static void appShortcutToDesktop(string installLoc)
         {
-            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-
-            using (StreamWriter writer = new StreamWriter(deskDir + "\\" + "Launch Assist" + ".url"))
-            {
-                string app = Path.Combine(installLoc, "Assist.exe");
-                writer.WriteLine("[InternetShortcut]");
-                writer.WriteLine("URL=file:///" + app);
-                writer.WriteLine("IconIndex=0");
-                string icon = app.Replace('\\', '/');
-                writer.WriteLine("IconFile=" + icon);
-            }
+            object shDesktop = (object)"Desktop";
+            WshShell shell = new WshShell();
+            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\Assist.lnk";
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+            shortcut.TargetPath = Path.Combine(installLoc, "Assist.exe");
+            shortcut.WorkingDirectory = Path.Combine(installLoc, "Assist.exe");
+            shortcut.Save();
+            AddShortcut(installLoc);
         }
         #endregion
 
