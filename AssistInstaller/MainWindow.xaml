@@ -57,6 +57,7 @@
                 <RowDefinition/>
                 <RowDefinition Height="28"/>
             </Grid.RowDefinitions>
+            <Label Content="Getting Installer Data..." Foreground="White" FontFamily="{StaticResource WorkSans}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Frame x:Name="MainContentFrame" NavigationUIVisibility="Hidden"/>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel.Resources>

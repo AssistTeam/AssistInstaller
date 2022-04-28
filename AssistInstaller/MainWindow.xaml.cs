@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,6 +16,7 @@ using System.Windows.Shapes;
 using AssistInstaller.MVVM.Models;
 using AssistInstaller.MVVM.ViewModels;
 using AssistInstaller.MVVM.Views;
+using Newtonsoft.Json;
 
 namespace AssistInstaller
 {
@@ -100,9 +102,44 @@ namespace AssistInstaller
 
         #endregion
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            var s = await GetInstllerDataAsync();
+
+            if(s == null)
+            {
+                MessageBox.Show("Failed to get installer data.");
+                Environment.Exit(0);
+            }
+                
+
+            AppInstance.InstallSettings = s;
+
             MainContentFrame.Content = new MVVM.Views.Menu();
+            
+        }
+
+        private async Task<InstallSettings> GetInstllerDataAsync()
+        {
+            HttpClient client = new HttpClient();
+
+            var resp = await client.GetAsync("https://api.assistapp.dev/data/installer");
+
+            try
+            {
+                InstallSettings settings =
+                JsonConvert.DeserializeObject<InstallSettings>(await resp.Content.ReadAsStringAsync());
+
+                return settings;
+            }
+            catch(Exception e)
+            {
+                
+                return null;
+            }
+            
+
+            
         }
 
 

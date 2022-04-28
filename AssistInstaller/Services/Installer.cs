@@ -26,24 +26,13 @@ namespace AssistInstaller.Services
         private const string zipName = "assist.zip";
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         private static string tempFolderName = "temp";
+        private static InstallSettings settings => MainWindow.AppInstance.InstallSettings;
 
         public async static Task InstallAssist()
         {
             MainWindow.AppInstance.InstallStatus = $"Getting Installer Data";
-            // Check for Previous Install.
 
-            List<string> installedPrograms = GetInstalledPrograms();
-
-            if (installedPrograms.Count != 0)
-            {
-                var pro = installedPrograms.Where(p => p == "Assist").SingleOrDefault();
-
-                if (pro != null)
-                {
-                    MessageBox.Show("We have detected Assist installed on your computer." + pro);
-                    Environment.Exit(0);
-                }
-            }
+            var installedPrograms = GetInstalledPrograms();
 
             var rand = new Random();
             tempFolderName =
@@ -53,13 +42,6 @@ namespace AssistInstaller.Services
             var installPath = MainWindow.AppInstance.InstalLoc;
 
             Directory.CreateDirectory(installPath); // Prevents Errors
-
-            HttpClient client = new HttpClient();
-
-            var resp = await client.GetAsync("https://api.assistapp.dev/data/installer");
-
-            InstallSettings settings =
-                JsonConvert.DeserializeObject<InstallSettings>(await resp.Content.ReadAsStringAsync());
 
             //Clear Files in Dir
             foreach (var file in Directory.GetFiles(installPath, "*.*", SearchOption.AllDirectories))
@@ -95,6 +77,7 @@ namespace AssistInstaller.Services
             MainWindow.AppInstance.InstallProgress = 30;
 
             MainWindow.AppInstance.InstallStatus = $"Checking for Latest .Net";
+
             // Check for .Net 6
             bool bNetInstalledFlag = false;
             var installedRuntimes = CheckCoreDesktopRuntimes();
@@ -210,8 +193,8 @@ namespace AssistInstaller.Services
             // Add Assist to Control Panel :)
 
             // Creates Short cut on desktop.
-            appShortcutToDesktop(installPath);
-
+            await appShortcutToDesktop(installPath);
+            await CreateInstallerFileAsync();
             MainWindow.AppInstance.InstallProgress = 100;
 
         }
@@ -264,11 +247,8 @@ namespace AssistInstaller.Services
                 && (systemComponent == null);
         }
 
-        private static void CreateInstallerDataFile()
-        {
-
-        }
-        private static void AddShortcut(string installLoc)
+        
+        private static async Task AddShortcut(string installLoc)
         {
             string commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
             string appStartMenuPath = Path.Combine(commonStartMenuPath, "Programs", "Assist");
@@ -285,7 +265,7 @@ namespace AssistInstaller.Services
             shortcut.Save();
         }
 
-        private static void appShortcutToDesktop(string installLoc)
+        private static async Task appShortcutToDesktop(string installLoc)
         {
             object shDesktop = (object)"Desktop";
             WshShell shell = new WshShell();
@@ -294,7 +274,7 @@ namespace AssistInstaller.Services
             shortcut.TargetPath = Path.Combine(installLoc, "Assist.exe");
             shortcut.WorkingDirectory = Path.Combine(installLoc, "Assist.exe");
             shortcut.Save();
-            AddShortcut(installLoc);
+            await AddShortcut(installLoc);
         }
         #endregion
 
@@ -339,5 +319,24 @@ namespace AssistInstaller.Services
         }
 
         #endregion
+
+
+        private static async Task CreateInstallerFileAsync()
+        {
+            var s = new
+            {
+                installDate = DateTime.UtcNow.ToString(),
+                versionInstalled = MainWindow.AppInstance.InstallSettings.VersionNumber,
+                installLoction = MainWindow.AppInstance.InstalLoc,
+                executablePath = Path.Combine(MainWindow.AppInstance.InstalLoc, "Assist.exe")
+            };
+
+            var progData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData);
+            var jData = JsonConvert.SerializeObject(s, Formatting.Indented);
+
+            var di = Directory.CreateDirectory(Path.Combine(progData,"Assist"));
+
+            File.WriteAllText(Path.Combine(di.FullName, "AssistInstallSettings.json"), jData);
+        }
     }
 }
