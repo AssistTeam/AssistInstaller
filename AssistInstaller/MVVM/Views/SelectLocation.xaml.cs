@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using AssistInstaller.MVVM.ViewModels;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Path = System.IO.Path;
 
 namespace AssistInstaller.MVVM.Views
 {
@@ -40,6 +41,7 @@ namespace AssistInstaller.MVVM.Views
                 if (dia.ShowDialog() == CommonFileDialogResult.Ok)
                 {
                     MainWindow.AppInstance.InstalLoc = dia.FileName;
+
                 }
             }
         }

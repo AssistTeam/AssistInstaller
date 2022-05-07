@@ -39,7 +39,7 @@ namespace AssistInstaller.Services
                 new string(Enumerable.Repeat(chars, 9).Select(s => s[rand.Next(s.Length)]).ToArray());
 
 
-            var installPath = MainWindow.AppInstance.InstalLoc;
+            var installPath = Path.Combine(MainWindow.AppInstance.InstalLoc, "Assist");
 
             Directory.CreateDirectory(installPath); // Prevents Errors
 

@@ -14,7 +14,7 @@ namespace AssistInstaller.MVVM.ViewModels
         public InstallerPageState CurrentPageState { get; private set; }
         public List<InstallerPageState> PreviousPageState = new List<InstallerPageState>();
         public InstallSettings InstallSettings { get; set; }
-        private string _installLoc = Path.Combine("C:/", "Assist");
+        private string _installLoc = Path.Combine("C:/");
         public string InstalLoc
         {
             get => _installLoc;

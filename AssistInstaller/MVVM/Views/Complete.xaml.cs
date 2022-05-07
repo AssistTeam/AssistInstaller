@@ -38,7 +38,7 @@ namespace AssistInstaller.MVVM.Views
             {
                 StartInfo = new ProcessStartInfo()
                 {
-                    FileName = Path.Combine(MainWindow.AppInstance.InstalLoc, "Assist.exe"),
+                    FileName = Path.Combine(MainWindow.AppInstance.InstalLoc, "Assist", "Assist.exe"),
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true
