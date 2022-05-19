@@ -193,10 +193,38 @@ namespace AssistInstaller.Services
             // Add Assist to Control Panel :)
 
             // Creates Short cut on desktop.
-            await appShortcutToDesktop(installPath);
-            await CreateInstallerFileAsync();
+
+            //await appShortcutToDesktop(installPath);
+            
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Process.GetCurrentProcess().ProcessName + ".exe"), Path.Combine(installPath , "Uninstaller.exe"));
+            RegisterControlPanelProgram("Assist", installPath, $"pack://application:,,,/Resources/assistLogo.ico", Path.Combine(installPath, "Uninstaller.exe"));
             MainWindow.AppInstance.InstallProgress = 100;
 
+        }
+
+        public async static Task<bool> UninstallAssist()
+        {
+            var installedPrograms = GetInstalledPrograms();
+
+            if (installedPrograms.Count != 0)
+            {
+                var pro = installedPrograms.Where(p => p == "Assist").SingleOrDefault();
+
+                if (pro == null)
+                {
+                    MessageBox.Show("We have detected that Assist is not installed on your computer. Please Install Assist before Uninstalling.");
+                    Environment.Exit(0);
+                }
+            }
+
+           var r = await RemoveAssistFromControlPanel();
+
+           if (!r)
+           {
+              r = await RemoveAssistFromControlPanel();
+           }
+
+           return r;
         }
 
 
@@ -232,6 +260,35 @@ namespace AssistInstaller.Services
             return result;
         }
 
+        public static List<RegistryKey> GetInstalledProgs()
+        {
+            var result = new List<RegistryKey>();
+            result.AddRange(GetInstalledPrograms(RegistryView.Registry32));
+            result.AddRange(GetInstalledPrograms(RegistryView.Registry64));
+            return GetInstalledPrograms(RegistryView.Registry64);
+        }
+
+        private static List<RegistryKey> GetInstalledPrograms(RegistryView registryView)
+        {
+            var result = new List<RegistryKey>();
+
+            using (RegistryKey key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, registryView).OpenSubKey(registry_key))
+            {
+                foreach (string subkey_name in key.GetSubKeyNames())
+                {
+                    using (RegistryKey subkey = key.OpenSubKey(subkey_name))
+                    {
+                        if (IsProgramVisible(subkey))
+                        {
+                            result.Add(subkey);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
         private static bool IsProgramVisible(RegistryKey subkey)
         {
             var name = (string)subkey.GetValue("DisplayName");
@@ -247,7 +304,6 @@ namespace AssistInstaller.Services
                 && (systemComponent == null);
         }
 
-        
         private static async Task AddShortcut(string installLoc)
         {
             string commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
@@ -276,6 +332,81 @@ namespace AssistInstaller.Services
             shortcut.Save();
             await AddShortcut(installLoc);
         }
+
+        public static void RegisterControlPanelProgram(string appName, string installLocation, string displayicon, string uninstallString)
+        {
+            try
+            {
+                string Install_Reg_Loc = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+
+                RegistryKey hKey = (Registry.LocalMachine).OpenSubKey(Install_Reg_Loc, true);
+
+                RegistryKey appKey = hKey.CreateSubKey(appName);
+
+                appKey.SetValue("DisplayName", (object)appName, RegistryValueKind.String);
+
+                appKey.SetValue("Publisher", (object)"AssistTeam", RegistryValueKind.String);
+
+                appKey.SetValue("InstallLocation",
+                    (object)installLocation, RegistryValueKind.ExpandString);
+
+                appKey.SetValue("DisplayIcon", (object)displayicon, RegistryValueKind.String);
+
+                appKey.SetValue("UninstallString",
+                    (object)uninstallString, RegistryValueKind.ExpandString);
+
+                appKey.SetValue("DisplayVersion", (object)$"{MainWindow.AppInstance.InstallSettings.VersionNumber}", RegistryValueKind.String);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public static string RemoveControlPanelProgram(string appName)
+        {
+            string InstallerRegLoc = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+            RegistryKey homeKey = (Registry.LocalMachine).OpenSubKey(InstallerRegLoc, true);
+            RegistryKey appSubKey = homeKey.OpenSubKey(appName);
+            var installLoc = (string)appSubKey.GetValue("InstallLocation", null);
+            /*if (null != appSubKey)
+            {
+                homeKey.DeleteSubKey(appName);
+            }*/
+
+            return installLoc;
+        }
+
+        private static async Task<bool> RemoveAssistFromControlPanel()
+        {
+            
+            using (RegistryKey key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey(registry_key, true))
+            {
+                foreach (string subkey_name in key.GetSubKeyNames())
+                {
+                    if (subkey_name == "Assist")
+                    {
+                        key.DeleteSubKey("Assist", true);
+                        return true;
+                    }
+                }
+            }
+
+            using (RegistryKey key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(registry_key, true))
+            {
+                foreach (string subkey_name in key.GetSubKeyNames())
+                {
+                    if (subkey_name == "Assist")
+                    {
+                        key.DeleteSubKey("Assist", true);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         #endregion
 
         #region Check for Deps
@@ -320,23 +451,5 @@ namespace AssistInstaller.Services
 
         #endregion
 
-
-        private static async Task CreateInstallerFileAsync()
-        {
-            var s = new
-            {
-                installDate = DateTime.UtcNow.ToString(),
-                versionInstalled = MainWindow.AppInstance.InstallSettings.VersionNumber,
-                installLoction = MainWindow.AppInstance.InstalLoc,
-                executablePath = Path.Combine(MainWindow.AppInstance.InstalLoc, "Assist.exe")
-            };
-
-            var progData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData);
-            var jData = JsonConvert.SerializeObject(s, Formatting.Indented);
-
-            var di = Directory.CreateDirectory(Path.Combine(progData,"Assist"));
-
-            File.WriteAllText(Path.Combine(di.FullName, "AssistInstallSettings.json"), jData);
-        }
     }
 }

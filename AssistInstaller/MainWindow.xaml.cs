@@ -150,7 +150,7 @@ namespace AssistInstaller
             if (AppInstance.CurrentInstallerMode == InstallerMode.Install)
                 MainContentFrame.Navigate(new Uri("MVVM/Views/SelectLocation.xaml", UriKind.RelativeOrAbsolute));
             else if (AppInstance.CurrentInstallerMode == InstallerMode.Uninstall)
-                MainContentFrame.Navigate(new Uri("MVVM/Views/Uninstall.xaml", UriKind.RelativeOrAbsolute));
+                MainContentFrame.Navigate(new Uri("MVVM/Views/Uninstaller.xaml", UriKind.RelativeOrAbsolute));
         }
 
         async Task LocationLogic()
